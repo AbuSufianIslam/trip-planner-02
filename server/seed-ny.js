@@ -2,13 +2,7 @@
 // The data can then be loaded with the node seed.js
 
 var Promise = require("bluebird");
-var {
-  db,
-  Place,
-  Hotel,
-  Restaurant,
-  Activity
-} = require('./models');
+var {db, Hotel, Restaurant, Place, Activity} = require('./models');
 
 var data = {
   hotel: [
