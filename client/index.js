@@ -15,3 +15,33 @@ const map = new mapboxgl.Map({
 
 const marker = buildMarker('activities', fullstackCoords);
 marker.addTo(map);
+
+//select attarcation and make an optipn for each case
+const makeOption = (attraction, selector) => {
+	const option = new Option(attraction.name, attraction.id);
+	const select = document.getElementById(selector);
+	select.add(option);
+};
+
+const fetchAttractions = async () => {
+	try {
+		const res = await fetch('/api');
+		//console.log('res data ', res);
+		const data = await res.json();
+		//console.log('data ', data);
+		const { hotels, activities, restaurants } = data;
+		hotels.forEach((hotel) => {
+			makeOption(hotel, 'hotels-choices');
+		});
+		activities.forEach((activity) => {
+			makeOption(activity, 'activities-choices');
+		});
+		restaurants.forEach((restaurant) => {
+			makeOption(restaurant, 'restaurants-choices');
+		});
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+fetchAttractions();

@@ -3,10 +3,12 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const { db } = require('./models');
+// const bodyParser = require('body-parser');
 
 // logging and body-parsing
 app.use(morgan('dev'));
 app.use(express.json());
+//app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 
 // You'll of course want static middleware so your browser can request things
