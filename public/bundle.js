@@ -150,12 +150,12 @@ const buildAttraction = (category, attraction) => {
 	//remove itinerary form list
 	removeBtn.addEventListener('click', function remove() {
 		removeBtn.removeEventListener('click', remove);
-		state.selectedAttractions = state.selectedAttractions.filter((selected) => selectedId !== attraction.id);
-	});
+		state.selectedAttractions = state.selectedAttractions.filter((selected) => selected.Id !== attraction.id);
 
-	//remove attraction from dom
-	itineraryItem.remove();
-	marker.remove();
+		//remove attraction from dom
+		itineraryItem.remove();
+		marker.remove();
+	});
 };
 
 const handleAddAttraction = (attractionType) => {
