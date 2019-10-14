@@ -23,12 +23,61 @@ const makeOption = (attraction, selector) => {
 	select.add(option);
 };
 
+const state = {
+	attarcations: {},
+	selectedAttractions: []
+};
+
+const buildAttraction = (category, attraction) => {
+	//append in map
+	const markerlocation = buildMarker(category, attraction.place.location);
+	state.selectedAttractions.push({
+		id: attraction.id,
+		category
+	});
+	markerlocation.addTo(map);
+
+	//Remove button
+	const removeBtn = document.createElement('button');
+	removeBtn.className = 'remove-btn';
+	removeBtn.innerHTML = 'X';
+
+	//append item to day
+	const itineraryItem = document.createElement('li');
+	itineraryItem.className = 'itinerary-item';
+
+	itineraryItem.append(attraction.name, removeBtn); //itineraryItem.innerHTML = attraction.name
+	// console.log(`${category}-list`, category);
+	// console.log('itinerary', itineraryItem);
+	document.getElementById(`${category}-list`).append(itineraryItem);
+	//console.log('csdvun', new)
+
+	//remove itinerary form list
+	removeBtn.addEventListener('click', function remove() {
+		removeBtn.removeEventListener('click', remove);
+		state.selectedAttractions = state.selectedAttractions.filter((selected) => selectedId !== attraction.id);
+	});
+
+	//remove attraction from dom
+	itineraryItem.remove();
+	marker.remove();
+};
+
+const handleAddAttraction = (attractionType) => {
+	const select = document.getElementById(`${attractionType}-choices`);
+	const selectId = select.value;
+	const selectedAttraction = state.attarcations[attractionType].find((attraction) => +attraction.id === +selectId);
+
+	buildAttraction(attractionType, selectedAttraction);
+};
+
 const fetchAttractions = async () => {
 	try {
 		const res = await fetch('/api');
 		//console.log('res data ', res);
 		const data = await res.json();
 		//console.log('data ', data);
+		state.attarcations = data;
 		const { hotels, activities, restaurants } = data;
 		hotels.forEach((hotel) => {
 			makeOption(hotel, 'hotels-choices');
@@ -43,5 +92,9 @@ const fetchAttractions = async () => {
 		console.error(error);
 	}
 };
+
+[ 'hotels', 'restaurants', 'activities' ].forEach((attraction) => {
+	document.getElementById(`${attraction}-add`).addEventListener('click', () => handleAddAttraction(attraction));
+});
 
 fetchAttractions();
